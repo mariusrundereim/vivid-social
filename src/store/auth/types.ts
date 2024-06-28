@@ -22,6 +22,25 @@ export interface LoginRequest {
   password: string;
 }
 
+// export interface Profile {
+//   profile: string;
+//   email: string;
+//   bio: string;
+//   avatar: Avatar;
+//   banner: Banner;
+//   _count: {
+//     posts: number;
+//     followers: number;
+//     following: number;
+//   };
+// }
+
+// export interface RootState {
+//   auth: {
+//     token: string | null;
+//   };
+// }
+
 export interface AuthResponse {
   data: {
     name: string;
@@ -31,4 +50,8 @@ export interface AuthResponse {
     accessToken: string;
   };
   meta: {};
+}
+
+export interface AuthState {
+  token: string | null;
 }

@@ -1,6 +1,13 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useLoginMutation } from "../../store/auth/apiSlice";
 import { LoginRequest } from "../../store/auth/types";
+import { setAuthToken } from "../../store/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+// import { useGetProfileQuery } from "../../store/profiles/apiSlice";
+import { save } from "../../utils/localStorage/save";
+import { RootState } from "../../store/store";
+import { useNavigate } from "react-router-dom";
+// import { useEffect } from "react";
 
 function LoginForm() {
   const {
@@ -8,14 +15,24 @@ function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginRequest>();
-
+  const dispatch = useDispatch();
   const [loginUser, { isLoading, isSuccess, isError, error }] =
     useLoginMutation();
+  const token = useSelector((state: RootState) => state.auth.token);
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<LoginRequest> = async (data) => {
     try {
       const response = await loginUser(data).unwrap();
       console.log("Login successful:", response);
+
+      // Save token to local storage and update the state
+      const token = response.data.accessToken;
+      save("authToken", token);
+      dispatch(setAuthToken(token));
+
+      // Redirect to profile page
+      navigate(`/profiles/${response.data.name}`);
     } catch (err) {
       console.error("Login error:", err);
     }

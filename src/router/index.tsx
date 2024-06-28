@@ -1,21 +1,24 @@
-import { Routes, Route } from "react-router-dom";
 import Layout from "./layout";
 import Home from "../pages/Home";
 import RegisterForm from "../pages/Register";
 import LoginForm from "../pages/Login";
+import Profile from "../pages/Profile";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "register", element: <RegisterForm /> },
+      { path: "login", element: <LoginForm /> },
+    ],
+  },
+  { path: "/profiles/:name", element: <Profile /> },
+]);
 
 function Router() {
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/login" element={<LoginForm />} />
-        </Route>
-      </Routes>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default Router;
